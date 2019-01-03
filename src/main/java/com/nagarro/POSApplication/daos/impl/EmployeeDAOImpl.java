@@ -2,10 +2,12 @@ package com.nagarro.POSApplication.daos.impl;
 
 import java.util.List;
 
+import org.apache.tomcat.util.bcel.classfile.Constant;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
+import com.nagarro.POSApplication.constants.Constants;
 import com.nagarro.POSApplication.daos.EmployeeDAO;
 import com.nagarro.POSApplication.dtos.CashDrawerDTO;
 import com.nagarro.POSApplication.dtos.CustomerDTO;
@@ -146,15 +148,21 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 	@Override
 	public MessageDTO updateInventory(OrderDTO dto) {
 		Session session=  HibernateUtil.getSessionFactory().openSession();
+		MessageDTO messageDTO = new MessageDTO();
 		session.beginTransaction();
-		
+		for(ProductDTO productDTO: dto.getProducts()) {
 		String hql = "update  Inventory I set I.quantity = I.quantity - :quantity where "
 				+ "I.product1.productId =:productId";
 		Query query = session.createQuery(hql);
-		query.setParameter("quantity", dto.getQuantity());
-		query.setParameter("productId", dto.getProductId());
+		query.setParameter("quantity", productDTO.getQuantity());
+		query.setParameter("productId", productDTO.getProductId());
 		System.out.println(query.executeUpdate());
+		}
 		session.getTransaction().commit();
+		session.close();
+		messageDTO.setMessage(Constants.SUCCESS);
+		return messageDTO;
+		
 		
 		
 	}

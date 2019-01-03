@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.nagarro.POSApplication.constants.Constants;
 import com.nagarro.POSApplication.daos.EmployeeDAO;
 import com.nagarro.POSApplication.dtos.CashDrawerDTO;
 import com.nagarro.POSApplication.dtos.CustomerDTO;
@@ -51,12 +52,17 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public MessageDTO placeOrder(OrderDTO dto) {
-		if(employeeDAO.placeOrder(dto).getMessage().equalsIgnoreCase("success")) {
+		MessageDTO messageDTO;
+		if(employeeDAO.placeOrder(dto).getMessage().equalsIgnoreCase(Constants.SUCCESS)) {
 		
-				employeeDAO.updateInventory(dto);
+				messageDTO= employeeDAO.updateInventory(dto);
 
 		}
-	return null;
+		else {
+			messageDTO= new MessageDTO();
+			messageDTO.setMessage(Constants.FAILED);
+		}
+		return messageDTO;
 	}
 	
 	
