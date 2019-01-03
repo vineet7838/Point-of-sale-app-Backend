@@ -156,7 +156,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 		Query query = session.createQuery(hql);
 		query.setParameter("quantity", productDTO.getQuantity());
 		query.setParameter("productId", productDTO.getProductId());
-		System.out.println(query.executeUpdate());
+		query.executeUpdate();
 		}
 		session.getTransaction().commit();
 		session.close();
@@ -164,6 +164,24 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 		return messageDTO;
 		
 		
+		
+	}
+
+	@Override
+	public MessageDTO updateCashDrawer(OrderDTO dto) {
+		Session session=  HibernateUtil.getSessionFactory().openSession();
+		MessageDTO messageDTO = new MessageDTO();
+		session.beginTransaction();
+		String hql="update Employee E set E.endingBal= E.endingBal + :orderAmount "
+				+ "where E.employeeId =:employeeID";
+		Query query= session.createQuery(hql);
+		query.setParameter("employeeID", dto.getEmployeeId());
+		query.setParameter("orderAmount", dto.getTotal());
+		query.executeUpdate();
+		session.getTransaction().commit();
+		session.close();
+		messageDTO.setMessage(Constants.SUCCESS);
+		return messageDTO;
 		
 	}
 	

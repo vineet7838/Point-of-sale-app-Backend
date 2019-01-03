@@ -16,15 +16,16 @@ import com.nagarro.POSApplication.dtos.MessageDTO;
 import com.nagarro.POSApplication.dtos.OrderDTO;
 import com.nagarro.POSApplication.dtos.ProductDTO;
 import com.nagarro.POSApplication.services.EmployeeService;
+
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 	@Autowired
 	EmployeeDAO employeeDAO;
-	
+
 	@Override
 	public LoginResponseDTO login(LoginDTO dto) {
 		return employeeDAO.loginEmployee(dto);
-		
+
 	}
 
 	@Override
@@ -34,7 +35,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public List<ProductDTO> getProducts(String param) {
-		
+
 		return employeeDAO.getProducts(param);
 	}
 
@@ -46,25 +47,34 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public EmployeeDTO getEmployeeDetails(EmployeeDTO dto) {
-		
+
 		return employeeDAO.getEmployeeDetails(dto);
 	}
 
 	@Override
 	public MessageDTO placeOrder(OrderDTO dto) {
-		MessageDTO messageDTO;
-		if(employeeDAO.placeOrder(dto).getMessage().equalsIgnoreCase(Constants.SUCCESS)) {
-		
-				messageDTO= employeeDAO.updateInventory(dto);
+		MessageDTO messageDTO = null;
 
-		}
-		else {
-			messageDTO= new MessageDTO();
+		if (employeeDAO.placeOrder(dto).getMessage().equalsIgnoreCase(Constants.SUCCESS)) {
+			if (dto.getStatus().equalsIgnoreCase(Constants.SUCCESS)) {
+				if (employeeDAO.updateInventory(dto).getMessage().equalsIgnoreCase(Constants.SUCCESS)) {
+					if( dto.getPaymentMode().equalsIgnoreCase(Constants.CASH)) {
+						messageDTO= employeeDAO.updateCashDrawer(dto);	
+						}else {
+					messageDTO = new MessageDTO();
+					messageDTO.setMessage(Constants.SUCCESS);
+					}
+					}
+				
+			} else {
+				messageDTO = new MessageDTO();
+				messageDTO.setMessage(Constants.SUCCESS);
+			}
+		} else {
+			messageDTO = new MessageDTO();
 			messageDTO.setMessage(Constants.FAILED);
 		}
 		return messageDTO;
 	}
-	
-	
 
 }

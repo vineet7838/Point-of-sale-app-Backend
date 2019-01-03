@@ -27,4 +27,6 @@ public interface EmployeeDAO {
 
 	MessageDTO updateInventory(OrderDTO dto);
 
+	MessageDTO updateCashDrawer(OrderDTO dto);
+
 }
