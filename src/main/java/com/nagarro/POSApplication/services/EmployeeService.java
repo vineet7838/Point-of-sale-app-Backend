@@ -25,4 +25,8 @@ public interface EmployeeService {
 
 	MessageDTO placeOrder(OrderDTO dto);
 
+	List<CustomerDTO> getAllCustomers();
+
+	List<ProductDTO> getAllProducts();
+
 }

@@ -2,7 +2,6 @@ package com.nagarro.POSApplication.daos.impl;
 
 import java.util.List;
 
-import org.apache.tomcat.util.bcel.classfile.Constant;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
@@ -48,9 +47,6 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 		
 		
 		session.close();
-		
-		//adfdsf
-		
 		
 		return responseDTO;
 	}
@@ -183,6 +179,30 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 		messageDTO.setMessage(Constants.SUCCESS);
 		return messageDTO;
 		
+	}
+
+	@Override
+	public List<CustomerDTO> getAllCustomers() {
+		Session session= HibernateUtil.getSessionFactory().openSession();
+		String hql="From Customer";
+		Query query= session.createQuery(hql);
+		query.setFirstResult(0);
+		query.setMaxResults(10);
+		List<Customer> res=query.list();
+		return CustomerDTOMapper.mapToListCustomerDTO(res);
+		
+		
+	}
+
+	@Override
+	public List<ProductDTO> getAllProducts() {
+		Session session= HibernateUtil.getSessionFactory().openSession();
+		String hql="From Product";
+		Query query= session.createQuery(hql);
+		query.setFirstResult(0);
+		query.setMaxResults(10);
+		List<Product> res=query.list();
+		return ProductDTOMapper.mapToListProductDTO(res);
 	}
 	
 	

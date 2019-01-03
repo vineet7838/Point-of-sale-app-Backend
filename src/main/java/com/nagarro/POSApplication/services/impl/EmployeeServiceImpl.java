@@ -77,4 +77,17 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return messageDTO;
 	}
 
+	@Override
+	public List<CustomerDTO> getAllCustomers() {
+		return employeeDAO.getAllCustomers();
+	}
+
+	@Override
+	public List<ProductDTO> getAllProducts() {
+	
+		return employeeDAO.getAllProducts();
+	}
+	
+	
+
 }

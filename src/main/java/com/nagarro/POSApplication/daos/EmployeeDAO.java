@@ -29,4 +29,8 @@ public interface EmployeeDAO {
 
 	MessageDTO updateCashDrawer(OrderDTO dto);
 
+	List<CustomerDTO> getAllCustomers();
+
+	List<ProductDTO> getAllProducts();
+
 }

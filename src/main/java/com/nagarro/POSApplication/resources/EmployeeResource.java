@@ -57,7 +57,14 @@ public class EmployeeResource {
 	MessageDTO placeOrder(@RequestBody OrderDTO dto) {
 		return employeeService.placeOrder(dto);
 	}
-	
+	@GetMapping(value="/customer")
+	List<CustomerDTO> getAllCustomers(){
+		return employeeService.getAllCustomers();
+	}
+	@GetMapping(value="/product")
+	List<ProductDTO> getAllProducts(){
+		return employeeService.getAllProducts();
+	}
 	
 
 }
